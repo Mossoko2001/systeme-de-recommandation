@@ -1,0 +1,4 @@
+django_rest_framework
+scikit-learn
+pandas
+numpy
