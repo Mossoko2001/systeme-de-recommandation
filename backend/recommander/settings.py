@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,10 +42,50 @@ INSTALLED_APPS = [
 
     # Apps externes
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',  # AJOUT IMPORTANT
+
+    'drf_yasg', # pour la documentation
 
     # mes apps
     'recommandation_api',
 ]
+
+# Paramètres optionnels pour la doc
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'JWT authentication. Format: "Bearer {token}"'
+        }
+    },
+    'USE_SESSION_AUTH': False,  # Désactive l'UI de login DRF
+}
+
+
+AUTH_USER_MODEL = 'recommandation_api.CustomUser'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # Durée de validité prolongée
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,  # Met à jour le last_login dans la table User
+}
+# # settings.py (DÉCONSEILLÉ en production)
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
+# }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
