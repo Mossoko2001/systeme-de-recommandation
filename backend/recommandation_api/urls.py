@@ -16,7 +16,7 @@ schema_view = get_schema_view(
       title="API Recommandation",
       default_version='v1',
       description="API pour le système de recommandation de films/livres",
-      contact=openapi.Contact(email="camara13fs@gmail.com"),
+      contact=openapi.Contact(name="Developper Mossoko", email="camara13fs@gmail.com"),
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
