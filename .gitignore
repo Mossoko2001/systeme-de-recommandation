@@ -1,6 +1,6 @@
 *.pkl
 *.csv
-
+frontend/
 Front-end/.env
 Front-end/.env.local
 Front-end/.env.development
