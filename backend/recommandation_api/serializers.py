@@ -53,8 +53,8 @@ class UserRecommendParamsSerializer(serializers.Serializer):
     # user_id = serializers.IntegerField()
     dataset_type = serializers.ChoiceField(choices=['books', 'movies'])
     top_n = serializers.IntegerField(required=False, default=5)
-    # weight_content = serializers.FloatField(required=False, default=0.5)
-    # weight_collaborative = serializers.FloatField(required=False, default=0.5)
+    weight_content = serializers.FloatField(required=False, default=0.5)
+    weight_collaborative = serializers.FloatField(required=False, default=0.5)
 
 class ItemRecommendParamsSerializer(serializers.Serializer):
     item_id = serializers.IntegerField()

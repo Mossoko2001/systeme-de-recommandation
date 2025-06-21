@@ -79,7 +79,7 @@ class UserRecommendView(APIView):
     GET: Liste des recommandations personnalisées pour l'utilisateur connecter
     Nécessite une authentification JWT valide.
 
-    GET /api/recommend/user/?&dataset_type=<books|movies>&top_n=<n>
+    GET /api/recommend/user/?&dataset_type=<books|movies>&top_n=<n>&weight_content=<w1>&weight_collaborative=<w2>
     """
     permission_classes = [permissions.IsAuthenticated] # Assurez-vous que l'utilisateur est authentifié
 
@@ -98,6 +98,18 @@ class UserRecommendView(APIView):
                 openapi.IN_QUERY,
                 description="Nombre de recommandation à retourner",
                 type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                'weight_content',
+                openapi.IN_QUERY,
+                description="Poid de l'algo content based",
+                type=openapi.TYPE_NUMBER
+            ),
+            openapi.Parameter(
+                'weight_collaborative',
+                openapi.IN_QUERY,
+                description="Poid de l'algo collaborative based",
+                type=openapi.TYPE_NUMBER
             ),
             openapi.Parameter(
                 'Authorization',
@@ -119,13 +131,15 @@ class UserRecommendView(APIView):
 
         # Utilisez l'ID de l'utilisateur connecté
         user_id = request.user.id
-        weight_content = 0.3
-        weight_collaborative = 0.7
+        # weight_content = 0.3
+        # weight_collaborative = 0.7
 
         hybrid_recommender = build_hybrid_recommender(
             dataset_type=validated['dataset_type'],
-            weight_content=weight_content,
-            weight_collaborative=weight_collaborative
+            # weight_content=weight_content,
+            weight_content=validated['weight_content'],
+            # weight_collaborative=weight_collaborative
+            weight_collaborative=validated['weight_collaborative']
         )
 
         df = hybrid_recommender.recommend_for_user(
